@@ -15,7 +15,7 @@ const Login = () => {
 
     return (
         <div className='text-white'>
-            <h1 className='font-bold text-3xl text-center py-14'>Login to Get your fans to support you</h1>
+            <h1 className='font-bold text-3xl text-center py-14'>Support What You Love: Login & make a difference</h1>
 
             <div className="flex flex-col gap-2 min-h-screen items-center p-10">
 
