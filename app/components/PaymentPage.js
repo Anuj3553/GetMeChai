@@ -3,6 +3,11 @@ import Script from 'next/script'
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { fetchuser, fetchpayments, initiate } from '@/actions/useractions'
+import { useSearchParams } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify';
+import { Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation'
 
 const PaymentPage = ({ username }) => {
     const { data: session } = useSession()
@@ -14,10 +19,29 @@ const PaymentPage = ({ username }) => {
 
     const [currentUser, setcurrentUser] = useState([])
     const [payments, setPayments] = useState([])
+    const searchParams = useSearchParams()
+    const router = useRouter()
 
     useEffect(() => {
         getData()
     }, [])
+
+    useEffect(() => {
+        if (searchParams.get("paymentdone") === "true") {
+            toast('Thanks for your donation!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }
+        router.push(`/${username}`)
+    }, []);
 
     const handleChange = (e) => {
         setPaymentform({ ...paymentform, [e.target.name]: e.target.value })
@@ -61,6 +85,20 @@ const PaymentPage = ({ username }) => {
 
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+            {/* Same as */}
+            <ToastContainer />
             <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
 
             <div className='cover'>
@@ -96,11 +134,11 @@ const PaymentPage = ({ username }) => {
                 <div className="font-bold text-lg">
                     @{username}
                 </div>
-                <div className="text-slate-300">
-                    Sip with purpose, support {username} with passion ☕
+                <div className="text-slate-300 text-center px-4">
+                    Sip with purpose, support {username} with passion
                 </div>
                 <div className="text-slate-400">
-                    {payments.length} supporters . raised
+                    {payments.length} Payments | ₹{payments.reduce((a, b) => a + b.amount, 0)} Raised
                 </div>
                 <div className="payment flex flex-col-reverse md:flex-row gap-3 container mt-12 px-5 md:px-0 ">
                     <div className="supporters w-full bg-slate-800/40 rounded-lg backdrop-blur-sm h-[28rem] p-5 md:p-10 overflow-auto">
@@ -127,7 +165,7 @@ const PaymentPage = ({ username }) => {
                             <input onChange={handleChange} value={paymentform.name} type="text" placeholder="Name" className="p-2 rounded-md bg-slate-800/40" required="" name="name" />
                             <input onChange={handleChange} value={paymentform.message} type="text" placeholder="Message" className="p-2 rounded-md bg-slate-800/40" required="" name="message" />
                             <input onChange={handleChange} value={paymentform.amount} type="number" inputMode="numeric" pattern="[0-9]*" placeholder="Amount" className="p-2 rounded-md bg-slate-800/40" name="amount" />
-                            <button onClick={() => pay(Number.parseInt(paymentform.amount) * 100)} type="button" className=" text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-md dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 disabled:from-gray-500 disabled:cursor-not-allowed disabled:shadow-gray-800/80 disabled:hover:bg-gradient-to-r disabled:bg-slate-600" disabled={paymentform.name.length < 2} >Support
+                            <button onClick={() => pay(Number.parseInt(paymentform.amount) * 100)} type="button" className=" text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-md dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 disabled:from-gray-500 disabled:cursor-not-allowed disabled:shadow-gray-800/80 disabled:hover:bg-gradient-to-r disabled:bg-slate-600" disabled={paymentform.name?.length < 2 || paymentform.message?.length < 1 || paymentform.amount?.length < 1} >Support
                             </button>
                         </form>
                         <div className="flex gap-3 mt-5">
