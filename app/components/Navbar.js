@@ -28,7 +28,7 @@ const Navbar = () => {
     <nav className="bg-gray-900 shadow-white text-white flex justify-between items-center px-4 py-4 md:h-16 flex-col md:flex-row">
       <Link href="/">
         <div className="logo font-bold text-3xl flex justify-center items-center">
-          <img src="/tea.gif" width={50} className="bg-blend-luminosity mb-[4px] md:" alt="logo" />
+          <img src="/tea.gif" width={60} className="bg-blend-luminosity mb-[12px] md:" alt="logo" />
           <span>GetMeCha!</span>
         </div>
       </Link>

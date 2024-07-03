@@ -1,36 +1,55 @@
 import NextAuth from 'next-auth';
+import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from 'next-auth/providers/github';
 import User from '@/models/User';
-// import Payment from '@/models/Payment';
 import connectDB from '@/db/connectDB';
+// import LinkedInProvider from "next-auth/providers/linkedin";
 
 export const authoptions = NextAuth({
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET
+      clientSecret: process.env.GITHUB_SECRET,
     }),
+    // LinkedInProvider({
+    //   clientId: process.env.LINKEDIN_CLIENT_ID,
+    //   clientSecret: process.env.LINKEDIN_CLIENT_SECRET
+    // })
   ],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }){
-      if(account.provider == "github"){
-        await connectDB()
-        // Check if the user already exists in the database
-        const currentUser = await User.findOne({email : email})
-        if(!currentUser){
-          // Create a new user
-          const newUser = await User.create({
+    async signIn({ user, account, profile, email }) {
+      await connectDB();
+
+      if (account.provider === "google") {
+        // Ensure email is verified and ends with @example.com
+        const currentUser = await User.findOne({ email: profile.email });
+        if (!currentUser) {
+          await User.create({
+            email: profile.email,
+            username: profile.email.split('@')[0],
+          });
+        }
+        return true;
+      } else if (account.provider === "github") {
+        const currentUser = await User.findOne({ email: email });
+        if (!currentUser) {
+          await User.create({
             email: user.email,
             username: user.email.split('@')[0],
-          })
+          });
         }
-        return true
+        return true;
       }
+      return false;
     },
-    async session({ session, user, token }){
-      const dbUser = await User.findOne({ email: session.user.email })
-      session.user.name = dbUser.username
-      return session
+    async session({ session, user, token }) {
+      const dbUser = await User.findOne({ email: session.user.email });
+      session.user.name = dbUser.username;
+      return session;
     }
   }
 });

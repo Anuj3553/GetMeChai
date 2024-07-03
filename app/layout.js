@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SessionWrapper from "./components/SessionWrapper";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {

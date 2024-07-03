@@ -178,7 +178,7 @@ const About = () => {
             </div>
 
             {/* Contact Form */}
-            <div className="max-w-screen-lg mx-auto p-5 mb-5 mt-32">
+            {/* <div className="max-w-screen-lg mx-auto p-5 mb-5 mt-32">
                 <div className="grid grid-cols-1 md:grid-cols-12 border">
                     <div className="bg-gray-900 md:col-span-4 p-10 text-white">
                         <p className="mt-4 text-sm leading-7 font-regular uppercase">Contact</p>
@@ -358,7 +358,7 @@ const About = () => {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Stats */}
             <section className="text-white-700 body-font">

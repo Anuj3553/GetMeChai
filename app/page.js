@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HorizontalCarousel from "./components/HorizontalCarouse";
 
 export default function Home() {
   return (
@@ -6,7 +7,7 @@ export default function Home() {
       <div className="flex flex-col justify-center items-center h-[100vh] gap-10 px-5 md:px-0 text-xs md:text-base">
         <div className="font-bold flex gap-2 text-5xl justify-center items-center md:flex-row flex-col-reverse">
           <span className="bg-gradient-to-b from-white to-gray-400 bg-clip-text font-bold text-transparent">Get Me Chai</span>
-          <span><img src="/tea.gif" alt="" className="bg-blend-luminosity w-[100px] md: md:mb-[-7px] mb-[40px]" /></span>
+          <span><img src="/tea.gif" alt="" className="bg-blend-luminosity w-[100px] md: md:mb-[30px] mb-[20px]" /></span>
         </div>
         <p className="px-5 text-wrap text-center text-lg">A Crowdfunding platform for creators to fund their projects.</p>
         <p className="px-5 text-wrap text-center text-lg">A place where your fans can buy you a chai. Unleash the power of your fans and get your projects funded.</p>
@@ -44,10 +45,8 @@ export default function Home() {
       <div className="bg-white h-1 opacity-10"></div>
 
       <div className="text-white container mx-auto pb-32 pt-14 flex flex-col items-center">
-        <h1 className="text-3xl font-bold text-center my-14">Learn more about us</h1>
-        <div className="w-[90%] h-[40vh] md:w-[50%] md:h-[40vh] lg:h-[40vh] xl:w-[50%] xl:h-[40vh]">
-          <iframe className="w-full h-full" src="https://www.youtube.com/embed/pnJ2fRxrZ3Q?si=zreTrHSfWD6EeYi1" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-        </div>
+        <h1 className="text-3xl font-bold text-center my-14 px-2">Helps the creators to grow</h1>
+        <HorizontalCarousel />
       </div>
     </div>
   );
