@@ -43,6 +43,7 @@ const HorizontalCarousel = async () => {
                         </div>
                         <div className="text-center mb-4">
                             <h2 className="text-xl font-semibold">{profile.name}</h2>
+                            <p className="text-gray-600 font-semibold">{profile.username}</p>
                             <p className="text-gray-600">{profile.donations}</p>
                         </div>
                         <div className="grid md:grid-cols-1 px-10 gap-4">
