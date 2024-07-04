@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const UserSchema = new Schema({
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     name: { type: String },
-    username: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
     profilepic: { type: String },
     coverpic: { type: String },
     razorpayid: { type: String },
