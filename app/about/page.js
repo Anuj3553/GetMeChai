@@ -103,8 +103,8 @@ const About = () => {
               {profiles.map((profile, index) => (
                 <Link href={`/${profile.username}`} key={index}>
                   <div className="p-4 pb-6 flex justify-center flex-col items-center">
-                    <img className="md:block hidden" src={profile.profilepic || 'https://via.placeholder.com/400x400?text=Profile+Image+Missing'} alt='Profile' />
-                    <img className="md:hidden block" src={profile.profilepic || 'https://via.placeholder.com/400x400?text=Profile+Image+Missing'} alt='Profile' />
+                    <img className="md:block hidden w-full" src={profile.profilepic || 'https://via.placeholder.com/400x400?text=Profile+Image+Missing'} alt='Profile' />
+                    <img className="md:hidden block w-full" src={profile.profilepic || 'https://via.placeholder.com/400x400?text=Profile+Image+Missing'} alt='Profile' />
                     <p className="font-medium text-xl leading-5 text-white-800 mt-4">{profile.name}</p>
                   </div>
                 </Link>
