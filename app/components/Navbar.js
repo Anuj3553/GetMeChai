@@ -37,7 +37,7 @@ const Navbar = () => {
       </Link>
 
       <div className='right md:flex justify-center items-center'>
-        <div className="relative flex justify-center">
+        <div className="relative flex justify-center top-[5px]">
           {session && (
             <>
               <button
@@ -75,6 +75,22 @@ const Navbar = () => {
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdownDefaultButton"
                 >
+                  <li>
+                    <Link href="/"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={() => handleLinkClick()}
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/about"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={() => handleLinkClick()}
+                    >
+                      About us
+                    </Link>
+                  </li>
                   <li>
                     <Link href="/dashboard"
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"

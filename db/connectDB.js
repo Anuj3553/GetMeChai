@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-let mongoURI = "mongodb://localhost:27017/GetMeChai";
+let mongoURI = process.env.MONGO_URI;
 
 const connectDB = async () => {
     try {
@@ -7,7 +7,7 @@ const connectDB = async () => {
         mongoose.connect(mongoURI)
         console.log('Connected to Mongo Successfully')
     } catch (error) {
-        console.error(error)
+        console.log(error)
     }
 }
 

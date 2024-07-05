@@ -45,7 +45,7 @@ export default function Home() {
       <div className="bg-white h-1 opacity-10"></div>
 
       <div className="text-white container mx-auto pb-32 pt-14 flex flex-col items-center">
-        <h1 className="text-3xl font-bold text-center my-14 px-2">Helps the creators to grow</h1>
+        <h1 className="text-3xl font-bold text-center my-14 px-2">Helps your favourite to grow</h1>
         <HorizontalCarousel />
       </div>
     </div>

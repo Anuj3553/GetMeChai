@@ -27,8 +27,23 @@ const PaymentPage = ({ username }) => {
     }, [])
 
     useEffect(() => {
-        if (searchParams.get("paymentdone") === "true") {
-            toast('Thanks for your donation!', {
+        try {
+            if (searchParams.get("paymentdone") === "true") {
+                toast('Thanks for your donation!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+            }
+            router.push(`/${username}`)
+        } catch {
+            toast('Payment Failed!', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -40,7 +55,7 @@ const PaymentPage = ({ username }) => {
                 transition: Bounce,
             });
         }
-        router.push(`/${username}`)
+
     }, []);
 
     const handleChange = (e) => {

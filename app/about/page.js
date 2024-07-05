@@ -1,184 +1,207 @@
-import React from "react";
+"use client"
+import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import { Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import { UserCount, PaymentCount, SubscribeUser, fetchProfile } from '@/actions/useractions'
+import Link from "next/link";
 
 const About = () => {
-    return (
-        <>
-            {/* Main Section */}
-            <div className="2xl:container 2xl:mx-auto lg:py-16 lg:px-20 md:py-12 md:px-6 py-9 px-4">
-                <div className="flex flex-col lg:flex-row justify-between gap-8">
-                    <div className="w-full lg:w-5/12 flex flex-col justify-center">
-                        <h1 className="text-3xl lg:text-4xl font-bold leading-9 text-white-800 pb-4">About Us</h1>
-                        <p className="font-normal text-base leading-6 text-white ">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.In the first place we have granted to God, and by this our present charter confirmed for us and our heirs forever that the English Church shall be free, and shall have her rights entire, and her liberties inviolate; and we will that it be thus observed; which is apparent from</p>
-                    </div>
-                    <div className="w-full lg:w-8/12 ">
-                        <img className="w-full h-full" src="https://i.ibb.co/FhgPJt8/Rectangle-116.png" alt="A group of People" />
-                    </div>
-                </div>
 
-                <div className="flex lg:flex-row flex-col justify-between gap-8 pt-12">
-                    <div className="w-full lg:w-5/12 flex flex-col justify-center">
-                        <h1 className="text-3xl lg:text-4xl font-bold leading-9 text-white-800 pb-4">Our Story</h1>
-                        <p className="font-normal text-base leading-6 text-white ">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.In the first place we have granted to God, and by this our present charter confirmed for us and our heirs forever that the English Church shall be free, and shall have her rights entire, and her liberties inviolate; and we will that it be thus observed; which is apparent from</p>
-                    </div>
-                    <div className="w-full lg:w-8/12 lg:pt-8">
-                        <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 lg:gap-4 shadow-lg rounded-md">
-                            <div className="p-4 pb-6 flex justify-center flex-col items-center">
-                                <img className="md:block hidden" src="https://i.ibb.co/FYTKDG6/Rectangle-118-2.png" alt="Alexa featured Img" />
-                                <img className="md:hidden block" src="https://i.ibb.co/zHjXqg4/Rectangle-118.png" alt="Alexa featured Img" />
-                                <p className="font-medium text-xl leading-5 text-white-800 mt-4">Alexa</p>
-                            </div>
-                            <div className="p-4 pb-6 flex justify-center flex-col items-center">
-                                <img className="md:block hidden" src="https://i.ibb.co/fGmxhVy/Rectangle-119.png" alt="Olivia featured Img" />
-                                <img className="md:hidden block" src="https://i.ibb.co/NrWKJ1M/Rectangle-119.png" alt="Olivia featured Img" />
-                                <p className="font-medium text-xl leading-5 text-white-800 mt-4">Olivia</p>
-                            </div>
-                            <div className="p-4 pb-6 flex justify-center flex-col items-center">
-                                <img className="md:block hidden" src="https://i.ibb.co/Pc6XVVC/Rectangle-120.png" alt="Liam featued Img" />
-                                <img className="md:hidden block" src="https://i.ibb.co/C5MMBcs/Rectangle-120.png" alt="Liam featued Img" />
-                                <p className="font-medium text-xl leading-5 text-white-800 mt-4">Liam</p>
-                            </div>
-                            <div className="p-4 pb-6 flex justify-center flex-col items-center">
-                                <img className="md:block hidden" src="https://i.ibb.co/7nSJPXQ/Rectangle-121.png" alt="Elijah featured img" />
-                                <img className="md:hidden block" src="https://i.ibb.co/ThZBWxH/Rectangle-121.png" alt="Elijah featured img" />
-                                <p className="font-medium text-xl leading-5 text-white-800 mt-4">Elijah</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  const [userCount, setUserCount] = useState([])
+  const [paymentCount, setPaymentCount] = useState([])
+  const [profiles, setProfiles] = useState([])
+  const [email, setEmail] = useState("");
+
+  const getData = async (e) => {
+    let userRes = await UserCount();
+    setUserCount(userRes)
+    const paymentRes = await PaymentCount();
+    setPaymentCount(paymentRes)
+    let profileRes = await fetchProfile(e);
+    setProfiles(profileRes)
+  }
+
+  useEffect(() => {
+    document.title = "About - GetMeChai"
+    getData()
+  }, [])
+
+  const handleChange = (e) => {
+    setEmail({ ...email, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async (e) => {
+    try {
+      let a = await SubscribeUser(e)
+      toast('Subscribe Successfully!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      document.getElementById('email-address').value = '';
+    } catch {
+      toast('Subscribe Failed!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  }
+
+  return (
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
+      {/* Main Section */}
+      <div className="2xl:container 2xl:mx-auto lg:py-16 lg:px-20 md:py-12 md:px-6 py-9 px-4">
+        <div className="flex flex-col lg:flex-row justify-between gap-8">
+          <div className="w-full lg:w-5/12 flex flex-col justify-center">
+            <h1 className="text-3xl lg:text-4xl font-bold leading-9 text-white-800 pb-4">About Us</h1>
+            <p className="font-normal text-base leading-6 text-white-600">
+              GetMeChai is a crowdfunding platform designed to help creators fund their projects. It's a place where your fans can support you by buying you a chai, allowing you to unleash the power of your fanbase and get your projects funded.
+            </p>
+          </div>
+          <div className="w-full lg:w-8/12 ">
+            <img className="w-full h-full" src="/about.png" alt="A group of People" />
+          </div>
+        </div>
+
+        <div className="flex lg:flex-row flex-col justify-between gap-8 pt-12">
+          <div className="w-full lg:w-5/12 flex flex-col justify-center">
+            <h1 className="text-3xl lg:text-4xl font-bold leading-9 text-white-800 pb-4">Our Story</h1>
+            <p className="font-normal text-base leading-6 text-white-600">
+              At GetMeChai, we believe in empowering creators. We started this platform to provide a space where creators can connect with their fans and receive the support they need to bring their projects to life. Whether you're an artist, writer, musician, or any type of creator, GetMeChai is here to help you succeed.
+            </p>
+          </div>
+          <div className="w-full lg:w-8/12 lg:pt-8">
+            <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 lg:gap-4 shadow-lg rounded-md">
+              {profiles.map((profile, index) => (
+                <Link href={`/${profile.username}`} key={index}>
+                  <div className="p-4 pb-6 flex justify-center flex-col items-center">
+                    <img className="md:block hidden" src={profile.profilepic || 'https://via.placeholder.com/400x400?text=Profile+Image+Missing'} alt='Profile' />
+                    <img className="md:hidden block" src={profile.profilepic || 'https://via.placeholder.com/400x400?text=Profile+Image+Missing'} alt='Profile' />
+                    <p className="font-medium text-xl leading-5 text-white-800 mt-4">{profile.name}</p>
+                  </div>
+                </Link>
+              ))}
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div className="relative overflow-hidden bg-gray-900 pt-16 pb-32 space-y-24">
-                <div className="relative">
-                    <div className="lg:mx-auto lg:grid lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-2 lg:gap-24 lg:px-8 ">
-                        <div className="mx-auto max-w-xl px-6 lg:mx-0 lg:max-w-none lg:py-16 lg:px-0 ">
-
-                            <div>
-                                <div>
-                                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" aria-hidden="true"
-                                            className="h-8 w-8 text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                </div>
-
-                                <div className="mt-6">
-                                    <h2 className="text-3xl font-bold tracking-tight text-white">
-                                        Natural Language Processing (NLP):
-                                    </h2>
-                                    <p className="mt-4 text-lg text-gray-300">
-                                        The AI product utilizes advanced NLP algorithms to understand and interpret human language,
-                                        enabling it to accurately process and analyze text-based inputs.
-                                    </p>
-                                    <div className="mt-6">
-                                        <a className="inline-flex rounded-lg bg-pink-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-pink-600 hover:bg-pink-700 hover:ring-pink-700"
-                                            href="/login">
-                                            Learn More
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-12 sm:mt-16 lg:mt-0">
-                            <div className="-mr-48 pl-6 md:-mr-16 lg:relative lg:m-0 lg:h-full lg:px-0">
-                                <img loading="lazy" width="647" height="486"
-                                    className="w-full rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 lg:absolute lg:left-0 lg:h-full lg:w-auto lg:max-w-none" src="https://images.unsplash.com/photo-1569144157591-c60f3f82f137" />
-                            </div>
-                        </div>
-                    </div>
+      {/* Services Section */}
+      <div className="relative overflow-hidden bg-gray-900 pt-16 pb-32 space-y-24">
+        {/* First Service */}
+        <div className="relative">
+          <div className="lg:mx-auto lg:grid lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-2 lg:gap-24 lg:px-8 ">
+            <div className="mx-auto max-w-xl px-6 lg:mx-0 lg:max-w-none lg:py-16 lg:px-0 ">
+              <div>
+                <div>
+                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                      strokeWidth="1.5" stroke="currentColor" aria-hidden="true"
+                      className="h-8 w-8 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z">
+                      </path>
+                    </svg>
+                  </span>
                 </div>
-
-                {/* News Letter */}
-
-                <div className="relative">
-                    <div className="lg:mx-auto lg:grid lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-2 lg:gap-24 lg:px-8 ">
-                        <div className="mx-auto max-w-xl px-6 lg:mx-0 lg:max-w-none lg:py-16 lg:px-0 lg:col-start-2">
-                            <div>
-                                <div>
-                                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" aria-hidden="true"
-                                            className="h-8 w-8 text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div className="mt-6">
-                                    <h2 className="text-3xl font-bold tracking-tight text-white">
-                                        Sentiment Analysis:
-                                    </h2>
-                                    <p className="mt-4 text-lg text-gray-300">
-                                        The product has built-in sentiment analysis capabilities, allowing it to determine the
-                                        sentiment (positive, negative, or neutral) expressed in text or customer feedback.
-                                    </p>
-                                    <div className="mt-6">
-                                        <a className="inline-flex rounded-lg bg-pink-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-pink-600 hover:bg-pink-700 hover:ring-pink-700"
-                                            href="/login">
-                                            Learn More
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-12 sm:mt-16 lg:mt-0">
-                            <div className="-ml-48 pr-6 md:-ml-16 lg:relative lg:m-0 lg:h-full lg:px-0">
-                                <img alt="Inbox user interface" loading="lazy" width="647" height="486"
-                                    className="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:right-0 lg:h-full lg:w-auto lg:max-w-none" src="https://images.unsplash.com/photo-1599134842279-fe807d23316e" />
-                            </div>
-                        </div>
-                    </div>
+                <div className="mt-6">
+                  <h2 className="text-3xl font-bold tracking-tight text-white">
+                    Fast Payment:
+                  </h2>
+                  <p className="mt-4 text-lg text-gray-300">
+                    GetMeChai ensures that creators receive their funds quickly and securely. Our fast payment processing allows you to focus on your projects without worrying about delays in receiving support from your fans.
+                  </p>
+                  <div className="mt-6">
+                    <a className="inline-flex rounded-lg bg-pink-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-pink-600 hover:bg-pink-700 hover:ring-pink-700"
+                      href="/login">
+                      Learn More
+                    </a>
+                  </div>
                 </div>
-
-                <div className="relative">
-                    <div className="lg:mx-auto lg:grid lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-2 lg:gap-24 lg:px-8 ">
-                        <div className="mx-auto max-w-xl px-6 lg:mx-0 lg:max-w-none lg:py-16 lg:px-0 ">
-                            <div>
-                                <div>
-                                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" aria-hidden="true"
-                                            className="h-8 w-8 text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div className="mt-6">
-                                    <h2 className="text-3xl font-bold tracking-tight text-white">
-                                        Natural Language Generation (NLG):
-                                    </h2>
-                                    <p className="mt-4 text-lg text-gray-300">
-                                        The AI product can generate human-like written content, summaries, or reports based on
-                                        structured data or analysis results.
-                                    </p>
-                                    <div className="mt-6">
-                                        <a className="inline-flex rounded-lg bg-pink-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-pink-600 hover:bg-pink-700 hover:ring-pink-700"
-                                            href="/login">
-                                            Learn More
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-12 sm:mt-16 lg:mt-0">
-                            <div className="-mr-48 pl-6 md:-mr-16 lg:relative lg:m-0 lg:h-full lg:px-0">
-                                <img loading="lazy" width="646" height="485"
-                                    className="w-full rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 lg:absolute lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                                    src="https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+            <div className="mt-12 sm:mt-16 lg:mt-0">
+              <div className="mx-4 lg:relative lg:m-0 lg:h-full lg:px-0">
+                <img width="647" height="486"
+                  className="w-full rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 lg:absolute lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
+                  src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGF5bWVudHxlbnwwfHwwfHx8MA%3D%3D" alt="Fast Payment" />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Second Service */}
+        <div className="relative">
+          <div className="lg:mx-auto lg:grid lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-2 lg:gap-24 lg:px-8 ">
+            <div className="mx-auto max-w-xl px-6 lg:mx-0 lg:max-w-none lg:py-16 lg:px-0 lg:col-start-2">
+              <div>
+                <div>
+                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                      strokeWidth="1.5" stroke="currentColor" aria-hidden="true"
+                      className="h-8 w-8 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z">
+                      </path>
+                    </svg>
+                  </span>
+                </div>
+                <div className="mt-6">
+                  <h2 className="text-3xl font-bold tracking-tight text-white">
+                    Trusted Community:
+                  </h2>
+                  <p className="mt-4 text-lg text-gray-300">
+                    GetMeChai fosters a trusted community of creators and supporters. We ensure that all transactions are secure and transparent, building trust and encouraging more fans to support your creative journey.
+                  </p>
+                  <div className="mt-6">
+                    <a className="inline-flex rounded-lg bg-pink-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-pink-600 hover:bg-pink-700 hover:ring-pink-700"
+                      href="/login">
+                      Learn More
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-12 sm:mt-16 lg:mt-0">
+              <div className="mx-4 lg:relative lg:m-0 lg:h-full lg:px-0">
+                <img alt="Trusted Community" width="647" height="486"
+                  className="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:right-0 lg:h-full lg:w-auto lg:max-w-none"
+                  src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29tbXVuaXR5fGVufDB8fDB8fHww" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            {/* Contact Form */}
-            {/* <div className="max-w-screen-lg mx-auto p-5 mb-5 mt-32">
+      {/* Contact Form */}
+      {/* <div className="max-w-screen-lg mx-auto p-5 mb-5 mt-32">
                 <div className="grid grid-cols-1 md:grid-cols-12 border">
                     <div className="bg-gray-900 md:col-span-4 p-10 text-white">
                         <p className="mt-4 text-sm leading-7 font-regular uppercase">Contact</p>
@@ -360,79 +383,72 @@ const About = () => {
                 </div>
             </div> */}
 
-            {/* Stats */}
-            <section className="text-white-700 body-font">
-                <div className="container px-5 py-24 mx-auto">
-                    <h2 className="mb-12 text-center text-4xl font-extrabold text-white-900 dark:text-white-200 sm:text-5xl">Trusted around the world
-                    </h2>
-                    <div className="flex flex-wrap -m-4 text-center">
-                        <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
-                            <div className="border-2 border-white-600 px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
-                                    <path d="M8 17l4 4 4-4m-4-5v9"></path>
-                                    <path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 103 16.29"></path>
-                                </svg>
-                                <h2 className="title-font font-medium text-3xl text-white-900">2.7K</h2>
-                                <p className="leading-relaxed">Downloads</p>
-                            </div>
-                        </div>
-                        <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
-                            <div className="border-2 border-white-600 px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
-                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"></path>
-                                </svg>
-                                <h2 className="title-font font-medium text-3xl text-white-900">1.3K</h2>
-                                <p className="leading-relaxed">Users</p>
-                            </div>
-                        </div>
-                        <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
-                            <div className="border-2 border-white-600 px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
-                                    <path d="M3 18v-6a9 9 0 0118 0v6"></path>
-                                    <path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"></path>
-                                </svg>
-                                <h2 className="title-font font-medium text-3xl text-white-900">74</h2>
-                                <p className="leading-relaxed">Files</p>
-                            </div>
-                        </div>
-                        <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
-                            <div className="border-2 border-white-600 px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                </svg>
-                                <h2 className="title-font font-medium text-3xl text-white-900">46</h2>
-                                <p className="leading-relaxed">Places</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Subscribe Newsletter Section */}
-
-            <div className="bg-gray-900 py-16 sm:py-24 lg:py-32">
-                <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-12 lg:gap-8 lg:px-8">
-                    <div className="max-w-xl text-3xl font-bold tracking-tight text-white sm:text-4xl lg:col-span-7">
-                        <h2 className="inline sm:block lg:inline xl:block">Want product news and updates?</h2>
-                        <p className="inline sm:block lg:inline xl:block">Sign up for our newsletter.</p>
-                    </div>
-                    <form className="w-full max-w-md lg:col-span-5 lg:pt-2">
-                        <div className="flex gap-x-4">
-                            <label for="email-address" className="sr-only">Email address</label><input id="email-address" name="email" type="email" autocomplete="email" required="" className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" placeholder="Enter your email" /><button type="submit" className="flex rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Subscribe</button>
-                        </div>
-                        <p className="mt-4 text-sm leading-6 text-gray-300">We care about your data. Read our <a
-                            href="https://www.swellai.com/privacy" className="font-semibold text-white">privacy&nbsp;policy</a>.</p>
-                    </form>
-                </div>
+      {/* Stats */}
+      <section className="text-white-700 body-font">
+        <div className="container px-5 py-24 mx-auto">
+          <h2 className="mb-12 text-center text-4xl font-extrabold text-white-900 dark:text-white-200 sm:text-5xl">Trusted around the world
+          </h2>
+          <div className="flex flex-wrap -m-4 justify-center text-center">
+            <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
+              <div className="border-2 border-white-600 px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
+                <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"></path>
+                </svg>
+                <h2 className="title-font font-medium text-3xl text-white-900">{userCount}</h2>
+                <p className="leading-relaxed">Users</p>
+              </div>
             </div>
-        </>
-    );
+            <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
+              <div className="border-2 border-white-600 px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
+                <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <h2 className="title-font font-medium text-3xl text-white-900">{paymentCount}</h2>
+                <p className="leading-relaxed">Transactions</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Subscribe Newsletter Section */}
+      <div className="bg-gray-900 py-16 sm:py-24 lg:py-32">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-12 lg:gap-8 lg:px-8">
+          <div className="max-w-xl text-3xl font-bold tracking-tight text-white sm:text-4xl lg:col-span-7">
+            <h2 className="inline sm:block lg:inline xl:block">Want product news and updates?</h2>
+            <p className="inline sm:block lg:inline xl:block">Sign up for our newsletter.</p>
+          </div>
+          <form action={handleSubmit} className="w-full max-w-md lg:col-span-5 lg:pt-2">
+            <div className="flex gap-x-4">
+              <label htmlFor="email-address" className="sr-only">Email address</label>
+              <input
+                id="email-address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email.email ? email.email : ""}
+                onChange={handleChange}
+                className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                placeholder="Enter your email"
+              />
+              <button
+                type="submit"
+                className="flex rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              >
+                Subscribe
+              </button>
+            </div>
+            <p className="mt-4 text-sm leading-6 text-gray-300">
+              We care about your data. Read our <a href="https://www.swellai.com/privacy" className="font-semibold text-white">privacy&nbsp;policy</a>.
+            </p>
+          </form>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default About;
-
-export const metadata = {
-    title: "About - GetMeChai"
-}
