@@ -1,17 +1,23 @@
-import connectDB from '@/db/connectDB';
-import Payment from '@/models/Payment';
-import User from '@/models/User';
+"use client"
 import Link from 'next/link';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchProfile, fetchPaymentData } from '@/actions/useractions';
 
-const HorizontalCarousel = async () => {
-    await connectDB();
+const HorizontalCarousel = () => {
 
-    // Fetch users
-    const users = await User.find({});
+    const [users, setUsers] = useState([])
+    const [payments, setPayments] = useState([])
 
-    // Fetch payment details
-    const payments = await Payment.find({});
+    const getData = async (e) => {
+        let user = await fetchProfile(e)
+        setUsers(user)
+        let payment = await fetchPaymentData(e)
+        setPayments(payment)
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
 
     // Map users to their respective donations
     const profiles = users.map(user => {
