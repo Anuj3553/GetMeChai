@@ -44,6 +44,13 @@ export const fetchProfile = async () => {
     return user;
 }
 
+export const fetchCarouselProfile = async () => {
+    await connectDB();
+
+    const user = await User.find({});
+    return user;
+}
+
 export const fetchPaymentData = async () => {
     await connectDB();
 

@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { fetchProfile, fetchPaymentData } from '@/actions/useractions';
+import { fetchCarouselProfile, fetchPaymentData } from '@/actions/useractions';
 
 const HorizontalCarousel = () => {
 
@@ -9,7 +9,7 @@ const HorizontalCarousel = () => {
     const [payments, setPayments] = useState([])
 
     const getData = async (e) => {
-        let user = await fetchProfile(e)
+        let user = await fetchCarouselProfile(e)
         setUsers(user)
         let payment = await fetchPaymentData(e)
         setPayments(payment)
@@ -37,9 +37,9 @@ const HorizontalCarousel = () => {
     });
 
     return (
-        <div className="flex overflow-x-scroll md:justify-center items-center snap-x snap-mandatory w-full no-scrollbar space-x-2">
+        <div className="flex overflow-x-scroll items-center snap-x snap-mandatory w-full no-scrollbar space-x-2">
             {profiles.map((profile, index) => (
-                <section className="flex-shrink-0 md:w-1/3 w-full snap-center justify-center items-center" key={index}>
+                <section className="flex-shrink-0 md:w-[31.65%] lg:w-[32.5%] md:m-[0.5rem] w-full snap-center justify-center items-center" key={index}>
                     <div className="max-w-2xl mx-4 sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto mt-16 bg-white shadow-xl rounded-lg text-gray-900">
                         <div className="rounded-t-lg h-32 overflow-hidden">
                             <img className="object-cover object-top w-full" src={profile.coverImage || 'https://via.placeholder.com/400x400?text=Profile+Image+Missing'} alt='Cover' />
